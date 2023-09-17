@@ -30,4 +30,21 @@ router.post('/register', async (req, res) => {
     }
 })
 
+// app.use('api/user/login'...
+router.post('/login', async (req, res) => {
+    // Validate that the body content matches our requirements
+    const { error } = DataValidation.loginValidation(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    // check if the email exists
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) return res.status(400).send("Email not registered");
+
+    // encrypt password
+    const validPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!validPassword) return res.status(401).send('Invalid password');
+
+    res.status(200).send('logged in');
+})
+
 module.exports = router;
