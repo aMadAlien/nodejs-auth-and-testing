@@ -59,7 +59,7 @@ describe('/user/register', () => {
                 expect(res.status).to.eq(200);
                 expect(res.body.name).to.eq('John');
                 expect(res.body.email).to.eq(dynamicEmail);
-                expect(res.body.password).to.eq('qaqaqaq3112');
+                expect(res.body.password).to.not.eq('qaqaqaq3112');
             })
     });
 })
