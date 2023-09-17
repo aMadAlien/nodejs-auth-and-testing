@@ -1,3 +1,4 @@
+const Guid = require('guid');
 
 describe('/user/register', () => {
     const registerEndpoint = 'http://localhost:3000/api/user/register';
@@ -28,10 +29,10 @@ describe('/user/register', () => {
         })
     });
 
-    it('doesn\'t allow user creation with invalid email', () => {
+    it('cannnot duplicate user', () => {
         let badTestUser = {
             name: 'John',
-            email: 'testom',
+            email: 'doNotDeleteUser@email.com',
             password: 'qaqaqaq3112'
         }
         cy.request({
@@ -41,21 +42,23 @@ describe('/user/register', () => {
             body: badTestUser
         }).then((res) => {
             expect(res.status).to.eq(400);
-            expect(res.body).to.eq('"email" must be a valid email');
+            expect(res.body).to.eq('Email already registered');
         })
     });
 
     it('/register creates a user with valid body', () => {
+        let dynamicEmail = Guid.raw() + '@bar.com';
+
         let body = {
             name: 'John',
-            email: 'test@gmail.com',
+            email: dynamicEmail,
             password: 'qaqaqaq3112'
         }
         cy.request('POST', registerEndpoint, body)
             .then((res) => {
                 expect(res.status).to.eq(200);
                 expect(res.body.name).to.eq('John');
-                expect(res.body.email).to.eq('test@gmail.com');
+                expect(res.body.email).to.eq(dynamicEmail);
                 expect(res.body.password).to.eq('qaqaqaq3112');
             })
     });

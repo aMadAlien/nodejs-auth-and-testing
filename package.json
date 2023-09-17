@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "cypress": "^13.2.0",
+    "guid": "^0.0.12",
     "nodemon": "^3.0.1"
   }
 }
