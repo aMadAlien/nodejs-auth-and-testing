@@ -13,6 +13,8 @@ mongoose.connect(
 
 const authRoute = require('./routes/auth')
 
+// Middleware
+app.use(express.json())
 app.use('/api/user', authRoute)
 
 
