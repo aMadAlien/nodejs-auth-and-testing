@@ -7,10 +7,42 @@ describe('/user/register', () => {
             method: 'POST',
             url: registerEndpoint,
             failOnStatusCode: false
+        }).then((res) => {
+            expect(res.status).to.eq(400);
         })
-            .then((res) => {
-                expect(res.status).to.eq(400);
-            })
+    });
+
+    it('doesn\'t allow user creation with bad user body', () => {
+        let badTestUser = {
+            name: '1',
+            email: 'teom',
+            password: '2'
+        }
+        cy.request({
+            method: 'POST',
+            url: registerEndpoint,
+            failOnStatusCode: false,
+            body: badTestUser
+        }).then((res) => {
+            expect(res.status).to.eq(400);
+        })
+    });
+
+    it('doesn\'t allow user creation with invalid email', () => {
+        let badTestUser = {
+            name: 'John',
+            email: 'testom',
+            password: 'qaqaqaq3112'
+        }
+        cy.request({
+            method: 'POST',
+            url: registerEndpoint,
+            failOnStatusCode: false,
+            body: badTestUser
+        }).then((res) => {
+            expect(res.status).to.eq(400);
+            expect(res.body).to.eq('"email" must be a valid email');
+        })
     });
 
     it('/register creates a user with valid body', () => {

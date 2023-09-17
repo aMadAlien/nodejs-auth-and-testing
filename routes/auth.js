@@ -4,7 +4,7 @@ const Joi = require('@hapi/joi');
 
 const validationSchema = Joi.object({
     name: Joi.string().min(2).required(),
-    email: Joi.string().min(6).required().email,
+    email: Joi.string().min(6).required().email(),
     password: Joi.string().min(6).required(),
 })
 
@@ -12,7 +12,7 @@ const validationSchema = Joi.object({
 router.post('/register', async (req, res) => {
     // Validate that the body content matches our requirements
     const { error } = validationSchema.validate(req.body);
-    if (error) return res.status(400).send(error);
+    if (error) return res.status(400).send(error.details[0].message);
 
     const user = new User({
         name: req.body.name,
